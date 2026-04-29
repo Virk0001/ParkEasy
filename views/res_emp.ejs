@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monitor Reservations - ParkEasy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'custom-green': '#004643',
+            'custom-light-green': '#abd1c6',
+            'custom-off-white': '#f9bc60',
+            'custom-dark': '#001e1d',
+            'custom-orange': '#e16162',
+            'header-bg': '#0d1a26',
+            'nav-link': '#98c379',
+            'nav-link-hover': '#c678dd',
+            'button-bg': '#2c3e50',
+            'button-hover-bg': '#34495e',
+            'text-main': '#e0e0e0',
+            'text-accent': '#61afef',
+            'container-bg': '#1a2a3a',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/main/style.css" /> <!-- Keep for any existing custom styles if needed -->
+</head>
+<body class="bg-custom-dark text-text-main min-h-screen flex flex-col">
+  <header class="bg-header-bg shadow-lg py-6 sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center px-8">
+      <h1 class="text-3xl font-bold text-green-400">📋 Monitor Reservations</h1>
+      <nav class="header-nav flex items-center space-x-5">
+        <a href="/dashboard" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Dashboard</a>
+        <!-- Add other relevant navigation links here if needed, similar to lots.ejs -->
+         <a href="/logout" class="bg-red-500 hover:bg-red-700 text-white font-semibold text-base px-5 py-2 rounded-md transition-colors">Logout</a>
+         <% if (username) { %>
+            <span class="text-lg text-green-400 font-semibold">Employee: <%= username %></span>
+        <% } %>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <section class="filters mb-8 bg-container-bg shadow-xl rounded-lg p-6">
+      <input type="text" id="searchInput" placeholder="Search by User or Vehicle" class="w-full p-3 bg-slate-700 text-gray-200 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+    </section>
+
+    <section class="bg-container-bg shadow-xl rounded-lg p-6 md:p-8">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-700">
+          <thead class="bg-slate-800">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-green-400 uppercase tracking-wider">Reservation ID</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-green-400 uppercase tracking-wider">User</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-green-400 uppercase tracking-wider">Vehicle</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-green-400 uppercase tracking-wider">Lot</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-green-400 uppercase tracking-wider">Space</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-green-400 uppercase tracking-wider">Entry Time</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-green-400 uppercase tracking-wider">Exit Time</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-green-400 uppercase tracking-wider">Status</th>
+            </tr>
+          </thead>
+          <tbody id="reservationTableBody" class="bg-slate-800 divide-y divide-slate-700">
+            <% if (locals.reservations && reservations.length > 0) { %>
+              <% reservations.forEach(r => { %>
+                <tr class="hover:bg-slate-700 transition-colors">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= r.reservation_id %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= r.user_username || r.user_email || 'N/A' %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= r.vehicle_license_plate || 'N/A' %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= r.lot_name || 'N/A' %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= r.space_identifier || 'N/A' %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= new Date(r.start_time).toLocaleString() %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= new Date(r.end_time).toLocaleString() %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                      <%= r.status === 'active' ? 'bg-green-600 text-green-100' : 
+                         r.status === 'completed' ? 'bg-blue-600 text-blue-100' : 
+                         r.status === 'cancelled' ? 'bg-red-600 text-red-100' : 
+                         'bg-gray-600 text-gray-100' %>">
+                      <%= r.status %>
+                    </span>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="8" class="px-6 py-10 text-center text-gray-400 text-lg">No reservations found.</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-header-bg shadow-top mt-auto py-8">
+    <div class="container mx-auto px-8 text-center">
+        <p class="text-green-400">&copy; <%= new Date().getFullYear() %> ParkEasy. All rights reserved.</p>
+        <p class="text-slate-400 text-sm mt-2">Your hassle-free parking solution.</p>
+    </div>
+  </footer>
+
+  <script src="/js/res_emp.js" defer></script>
+</body>
+</html>

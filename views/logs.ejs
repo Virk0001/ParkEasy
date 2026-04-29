@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Logs - ParkEasy</title>
+    <link rel="stylesheet" href="/main/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'custom-green': '#004643',
+                        'custom-light-green': '#abd1c6',
+                        'custom-off-white': '#f9bc60',
+                        'custom-dark': '#001e1d',
+                        'custom-orange': '#e16162',
+                        'header-bg': '#0d1a26',
+                        'nav-link': '#98c379',
+                        'nav-link-hover': '#c678dd',
+                        'button-bg': '#2c3e50',
+                        'button-hover-bg': '#34495e',
+                        'text-main': '#e0e0e0',
+                        'text-accent': '#61afef',
+                        'container-bg': '#1a2a3a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        .header-nav a {
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+        .filter-section input, .filter-section select {
+            color: #e0e0e0; 
+            background-color: #2c3e50; /* bg-slate-700 */
+            border-color: #4a5568; /* border-slate-600 */
+        }
+        .filter-section input::placeholder {
+            color: #a0aec0; /* placeholder-gray-400 */
+        }
+    </style>
+</head>
+<body class="bg-custom-dark text-text-main min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-header-bg shadow-lg py-6 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center px-8">
+            <div class="flex items-center space-x-4">
+                <img src="/main/images/output.jpg" alt="ParkEasy Logo" class="h-14">
+                
+            </div>
+            <nav class="header-nav flex items-center space-x-5">
+                <a href="/dashboard" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Dashboard</a>
+                <a href="/manage_user_manage" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Manage Users</a>
+                <a href="/lots" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Manage Lots</a>
+                <a href="/issue_fine" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Issue Fine</a>
+                <a href="/logs" class="bg-green-500 text-white font-semibold text-base px-5 py-2 rounded-md transition-colors">View Logs</a>
+                <a href="/revenue" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Revenue</a>
+                <a href="/logout" class="bg-red-500 hover:bg-red-700 text-white font-semibold text-base px-5 py-2 rounded-md transition-colors">Logout</a>
+                <% if (username) { %>
+                    <span class="text-lg text-green-400 font-semibold">Employee: <%= username %></span>
+                <% } %>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="bg-container-bg shadow-xl rounded-lg p-8 md:p-12">
+            <h2 class="text-4xl font-bold text-green-400 mb-10 text-center">System Activity Logs</h2>
+
+            <!-- Filters Section -->
+            <section class="filter-section bg-slate-800 p-6 rounded-lg shadow-md mb-10">
+                <h3 class="text-2xl font-semibold text-green-300 mb-6">Filter Logs</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="logDate" class="block text-sm font-medium text-green-200 mb-1">Select Date:</label>
+                        <input type="date" id="logDate" class="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-md text-white focus:ring-green-500 focus:border-green-500">
+                    </div>
+                    <div>
+                        <label for="userSearch" class="block text-sm font-medium text-green-200 mb-1">Search User:</label>
+                        <input type="text" id="userSearch" placeholder="User name or ID" class="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-md text-white focus:ring-green-500 focus:border-green-500 placeholder-gray-400">
+                    </div>
+                    <div>
+                        <label for="vehicleSearch" class="block text-sm font-medium text-green-200 mb-1">Search Vehicle:</label>
+                        <input type="text" id="vehicleSearch" placeholder="License plate or model" class="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-md text-white focus:ring-green-500 focus:border-green-500 placeholder-gray-400">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Logs Table Section -->
+            <section class="bg-slate-800 p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-green-300 mb-6">Log Entries</h3>
+                <div class="overflow-x-auto max-h-[70vh]">
+                    <table class="min-w-full divide-y divide-slate-700">
+                        <thead class="bg-slate-700 sticky top-0">
+                            <tr>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-green-300 uppercase tracking-wider">Date</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-green-300 uppercase tracking-wider">Time</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-green-300 uppercase tracking-wider">Lot</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-green-300 uppercase tracking-wider">Action</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-green-300 uppercase tracking-wider">User</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-green-300 uppercase tracking-wider">Vehicle</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-green-300 uppercase tracking-wider">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logTableBody" class="bg-slate-800 divide-y divide-slate-700">
+                            <!-- Logs will be dynamically inserted here by logs.js -->
+                            <!-- Example Row (remove or comment out if logs.js populates it) -->
+                            <tr>
+                                <td colspan="7" class="px-6 py-10 text-center text-sm text-gray-400">Loading logs or no logs match criteria...</td>
+                            </tr> 
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-header-bg shadow-top mt-auto py-8">
+        <div class="container mx-auto px-8 text-center">
+            <p class="text-green-400">&copy; 2024 ParkEasy. All rights reserved.</p>
+            <p class="text-slate-400 text-sm mt-2">Your hassle-free parking solution.</p>
+        </div>
+    </footer>
+
+    <script src="/js/logs.js" defer></script>
+</body>
+</html>

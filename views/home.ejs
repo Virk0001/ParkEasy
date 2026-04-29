@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Parking System</title>
+  <link rel="stylesheet" href="/main/style.css" />
+</head>
+<body class="bg-slate-900 text-gray-100 min-h-screen font-sans flex flex-col">
+  <!-- Simple, clean header -->
+  <header class="bg-slate-900 w-full py-6">
+    <div class="container mx-auto px-6 lg:px-16 flex justify-between items-center">
+      <div class="flex items-center">
+        <span class="text-red-500 text-3xl mr-3">🚗</span>
+        <h1 class="text-3xl font-bold text-white">Smart Parking System</h1>
+      </div>
+      <nav class="flex items-center space-x-5">
+        <a href="/login" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Login</a>
+        <a href="/register" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Register</a>
+        <a href="/about" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">About Us</a>
+      </nav>
+
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    <!-- Hero section - simplified to match screenshot -->
+    <section class="hero bg-slate-800 py-16 lg:py-24 mb-16">
+      <div class="container mx-auto px-6 lg:px-16 text-center">
+        <h2 class="text-4xl lg:text-5xl font-bold text-white mb-6">Find Your Perfect Parking Spot, Anytime</h2>
+        <p class="text-lg text-gray-300 mb-10 mx-auto">Book, pay, and manage parking with ease.</p>
+        <a href="/login" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-8 rounded-md">Book Your Ticket</a>
+      </div>
+    </section>
+
+    <!-- About us section - clean and simple -->
+    <section id="about" class="py-16 bg-slate-900">
+      <div class="container mx-auto px-6 lg:px-16 text-center">
+        <h3 class="text-3xl font-semibold text-white mb-8">About Us</h3>
+        <div class="max-w-3xl mx-auto text-center text-gray-300">
+          <p class="mb-4">
+            Our Smart Parking System helps users find and reserve parking spots quickly,
+            while giving employees and admins tools to manage lots, issue fines, and view reports.
+          </p>
+          <p>Designed for efficiency, built for everyone.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="text-center py-8 text-gray-500 text-sm border-t border-slate-800">
+    <p>&copy; 2025 Smart Parking System | Contact us: support@smartparking.com</p>
+  </footer>
+
+  <script src="/js/home.js" defer></script>
+</body>
+</html>

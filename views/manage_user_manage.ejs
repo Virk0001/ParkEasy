@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Vehicles</title>
+  <link rel="stylesheet" href="/main/style.css" />
+</head>
+<body>
+  <header>
+    <h1>🚗 Vehicles of <%= user.name %></h1>
+    <form action="/manage_user" method="get">
+      <button type="submit">⬅ Back to User List</button>
+    </form>
+  </header>
+
+  <main>
+    <% if (vehicles.length === 0) { %>
+      <p>This user has no registered vehicles.</p>
+    <% } else { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Vehicle Model</th>
+            <th>Parked?</th>
+            <th>Lot</th>
+            <th>Space</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% vehicles.forEach(vehicle => { %>
+            <tr>
+              <td><%= vehicle.model %></td>
+              <td><%= vehicle.is_parked ? "Yes" : "No" %></td>
+              <td><%= vehicle.is_parked ? vehicle.lot : "—" %></td>
+              <td><%= vehicle.is_parked ? vehicle.space_id : "—" %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table> 
+    <% } %>
+  </main>
+</body>
+</html>

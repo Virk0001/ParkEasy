@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Parking Lots - ParkEasy</title>
+    <link rel="stylesheet" href="/main/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'custom-green': '#004643',
+                        'custom-light-green': '#abd1c6',
+                        'custom-off-white': '#f9bc60',
+                        'custom-dark': '#001e1d',
+                        'custom-orange': '#e16162',
+                        'header-bg': '#0d1a26',
+                        'nav-link': '#98c379',
+                        'nav-link-hover': '#c678dd',
+                        'button-bg': '#2c3e50',
+                        'button-hover-bg': '#34495e',
+                        'text-main': '#e0e0e0',
+                        'text-accent': '#61afef',
+                        'container-bg': '#1a2a3a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        .header-nav a {
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+        .lot-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .lot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 2px #38a169; /* Green border on hover */
+        }
+    </style>
+</head>
+<body class="bg-custom-dark text-text-main min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-header-bg shadow-lg py-6 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center px-8">
+            <div class="flex items-center space-x-4">
+                <img src="/main/images/output.jpg" alt="ParkEasy Logo" class="h-14">
+                
+            </div>
+            <nav class="header-nav flex items-center space-x-5">
+                <a href="/dashboard" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Dashboard</a>
+                <a href="/manage_user_manage" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Manage Users</a>
+                <a href="/lots" class="bg-green-500 text-white font-semibold text-base px-5 py-2 rounded-md transition-colors">Manage Lots</a>
+                <a href="/issue_fine" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Issue Fine</a>
+                <a href="/logs" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">View Logs</a>
+                <a href="/revenue" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Revenue</a>
+                <a href="/logout" class="bg-red-500 hover:bg-red-700 text-white font-semibold text-base px-5 py-2 rounded-md transition-colors">Logout</a>
+                <% if (username) { %>
+                    <span class="text-lg text-green-400 font-semibold">Employee: <%= username %></span>
+                <% } %>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="bg-container-bg shadow-xl rounded-lg p-8 md:p-12">
+            <h2 class="text-4xl font-bold text-green-400 mb-10 text-center">Manage Parking Lots</h2>
+            
+            <section class="lot-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <% if (locals.lots && lots.length > 0) { %>
+                    <% lots.forEach(lot => { %>
+                        <form action="/open-lot" method="get" class="lot-card bg-slate-800 p-6 rounded-lg shadow-lg flex flex-col items-center text-center cursor-pointer">
+                            <input type="hidden" name="lot_id" value="<%= lot.lot_id %>" />
+                            <button type="submit" class="focus:outline-none w-full">
+                                <h3 class="text-2xl font-semibold text-green-400 hover:text-green-300 mb-3"><%= lot.name %></h3>
+                                
+                                <p class="text-sm text-gray-400 mt-2">ID: <%= lot.lot_id %></p>
+                            </button>
+                        </form>
+                    <% }); %>
+                <% } else { %>
+                    <div class="col-span-full text-center py-10">
+                        <p class="text-gray-400 text-lg">No parking lots are currently configured in the system.</p>
+                        <p class="text-gray-500 mt-2">You can add new lots through the system administration interface.</p>
+                    </div>
+                <% } %>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-header-bg shadow-top mt-auto py-8">
+        <div class="container mx-auto px-8 text-center">
+            <p class="text-green-400">&copy; 2024 ParkEasy. All rights reserved.</p>
+            <p class="text-slate-400 text-sm mt-2">Your hassle-free parking solution.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

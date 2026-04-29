@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payments & Fines</title>
+  <link rel="stylesheet" href="/main/style.css" />
+</head>
+<body class="bg-slate-900 text-gray-100 min-h-screen font-sans flex flex-col">
+  <!-- Header -->
+  <header class="bg-slate-900 shadow-lg py-6 sticky top-0 z-50">
+      <div class="container mx-auto flex justify-between items-center px-8">
+          <div class="flex items-center space-x-4">
+              <img src="/main/images/output.jpg" alt="ParkEasy Logo" class="h-14">
+          </div>
+          <nav class="header-nav flex items-center space-x-5">
+              <% if (username) { %>
+                  <span class="text-lg text-green-400 font-semibold">Welcome, <%= username %>!</span>
+                  <a href="/dashboard" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Dashboard</a>
+                  <a href="/manage_vec" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Manage Vehicles</a>
+                  <a href="/reservations_user" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">My Reservations</a>
+                  <a href="/tickets_fines" class="bg-green-500 text-white font-semibold text-base px-5 py-2 rounded-md transition-colors">Payments & Fines</a>
+                  <a href="/logout" class="bg-red-500 hover:bg-red-700 text-white font-semibold text-base px-5 py-2 rounded-md transition-colors">Logout</a>
+                  
+              <% } else { %>
+                  <a href="/login" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Login</a>
+                  <a href="/signup" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">Sign Up</a>
+              <% } %>
+          </nav>
+      </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <section class="bg-slate-800 p-6 sm:p-8 rounded-lg shadow-xl mb-10">
+      <h2 class="text-xl sm:text-2xl font-semibold text-white mb-6">Unpaid Charges</h2>
+      <form id="filterSortForm" method="get" action="/tickets_fines" class="mb-6 flex flex-col sm:flex-row gap-4 items-center p-4 bg-slate-700 rounded-md">
+        <div class="flex-1 w-full sm:w-auto">
+          <label for="typeFilter" class="block text-sm font-medium text-gray-300 mb-1">Filter by Type:</label>
+          <select name="type" id="typeFilter" class="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-gray-100 focus:ring-green-500 focus:border-green-500 transition-colors">
+            <option value="" class="text-gray-400">All</option>
+            <option value="Parking Fee" <%= (typeof type !== 'undefined' && type === 'Parking Fee') ? 'selected' : '' %>>Parking Fee</option>
+            <option value="Fine" <%= (typeof type !== 'undefined' && type === 'Fine') ? 'selected' : '' %>>Fine</option>
+          </select>
+        </div>
+        <div class="flex-1 w-full sm:w-auto">
+          <label for="sortBy" class="block text-sm font-medium text-gray-300 mb-1">Sort by Amount:</label>
+          <select name="sort" id="sortBy" class="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-gray-100 focus:ring-green-500 focus:border-green-500 transition-colors">
+            <option value="" class="text-gray-400">Default</option>
+            <option value="amount_asc" <%= (typeof sort !== 'undefined' && sort === 'amount_asc') ? 'selected' : '' %>>Low to High</option>
+            <option value="amount_desc" <%= (typeof sort !== 'undefined' && sort === 'amount_desc') ? 'selected' : '' %>>High to Low</option>
+          </select>
+        </div>
+        <button type="submit" class="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-5 rounded-md shadow-md hover:shadow-lg transition duration-150 ease-in-out self-end sm:self-center mt-2 sm:mt-0">Apply</button>
+      </form>
+      <div id="chargesList" class="space-y-4">
+        <% if (locals.charges && charges.length > 0) { %>
+          <% charges.forEach(charge => { %>
+            <div class="card bg-slate-700 p-4 rounded-md shadow-lg flex justify-between items-center <%= charge.paid ? 'opacity-60' : '' %>">
+              <div>
+                <strong class="text-lg text-green-400"><%= charge.type %></strong><br/>
+                <span class="text-gray-300">Amount: ₹<%= charge.amount %></span>
+              </div>
+              <% if (!charge.paid) { %>
+                <form action="/payment_gateway" method="get" style="display:inline">
+                  <input type="hidden" name="charge_id" value="<%= charge.charge_id %>">
+                  <input type="hidden" name="amount" value="<%= charge.amount %>">
+                  <input type="hidden" name="type" value="<%= charge.type %>">
+                  <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md shadow hover:shadow-md transition duration-150 ease-in-out">Pay Now</button>
+                </form>
+              <% } else { %>
+                <span class="text-sm text-green-500 font-semibold">PAID</span>
+              <% } %>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p class="text-gray-400 text-center py-5">No unpaid charges found.</p>
+        <% } %>
+      </div>
+    </section>
+
+    <section class="bg-slate-800 p-6 sm:p-8 rounded-lg shadow-xl">
+      <h2 class="text-xl sm:text-2xl font-semibold text-white mb-6">Payment History</h2>
+      <div id="paymentHistory" class="space-y-4">
+        <% if (locals.paid_charges && paid_charges.length > 0) { %>
+          <% paid_charges.forEach(charge => { %>
+            <div class="card bg-slate-700 p-4 rounded-md shadow-lg opacity-80">
+              <strong class="text-lg text-green-400"><%= charge.type %></strong><br/>
+              <span class="text-gray-300">Amount: ₹<%= charge.amount %></span><br>
+              <span class="text-xs text-gray-400">Paid on: <%= new Date(charge.payment_date).toLocaleDateString() %></span>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p class="text-gray-400 text-center py-5">No payment history found.</p>
+        <% } %>
+      </div>
+    </section>
+    <div class="mt-12 text-center">
+        <a href="/" class="text-sm text-gray-400 hover:text-gray-300 hover:underline transition-colors">← Back to Home</a>
+    </div>
+  </main>
+
+  <script src="/js/tickets_fines.js" defer ></script>
+</body>
+</html>

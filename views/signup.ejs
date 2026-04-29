@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - ParkEasy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'custom-green': '#004643',
+                        'custom-light-green': '#abd1c6',
+                        'custom-off-white': '#f9bc60',
+                        'custom-dark': '#001e1d',
+                        'custom-orange': '#e16162',
+                        'header-bg': '#0d1a26',
+                        'nav-link': '#98c379',
+                        'nav-link-hover': '#c678dd',
+                        'button-bg': '#2c3e50',
+                        'button-hover-bg': '#34495e',
+                        'text-main': '#e0e0e0',
+                        'text-accent': '#61afef',
+                        'container-bg': '#1a2a3a',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/main/style.css">
+</head>
+<body class="bg-custom-dark text-text-main min-h-screen flex flex-col items-center justify-center px-4">
+    <div class="w-full max-w-lg">
+        <div class="bg-container-bg shadow-2xl rounded-xl p-8 md:p-12 mb-6">
+            <div class="flex justify-center mb-8">
+                <img src="/main/images/output.jpg" alt="ParkEasy Logo" class="h-20">
+            </div>
+            <h2 class="text-4xl font-bold text-green-400 mb-8 text-center">Create Your ParkEasy Account</h2>
+
+            <% if (locals.error && error.length > 0) { %>
+                <div class="bg-red-500 text-white p-3 rounded-md mb-6 text-center">
+                    <%= error %>
+                </div>
+            <% } %>
+            <% if (locals.success_msg && success_msg.length > 0) { %>
+                <div class="bg-green-500 text-white p-3 rounded-md mb-6 text-center">
+                    <%= success_msg %>
+                </div>
+            <% } %>
+             <% if (locals.error_msg && error_msg.length > 0) { %>
+                <div class="bg-red-500 text-white p-3 rounded-md mb-6 text-center">
+                    <%= error_msg %>
+                </div>
+            <% } %>
+
+            <form action="/registerDone" method="POST" class="space-y-6">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-green-400 mb-1">Full Name</label>
+                    <input type="text" id="name" name="name" required class="w-full p-3 bg-slate-700 text-gray-200 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Your Name">
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-green-400 mb-1">Email Address</label>
+                    <input type="email" id="email" name="email" required class="w-full p-3 bg-slate-700 text-gray-200 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="you@example.com">
+                </div>
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-green-400 mb-1">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required class="w-full p-3 bg-slate-700 text-gray-200 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="(123) 456-7890">
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-green-400 mb-1">Password</label>
+                    <input type="password" id="password" name="password" required class="w-full p-3 bg-slate-700 text-gray-200 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="••••••••">
+                </div>
+                <div>
+                    <label for="confirmPassword" class="block text-sm font-medium text-green-400 mb-1">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required class="w-full p-3 bg-slate-700 text-gray-200 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="••••••••">
+                </div>
+                <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-md transition-colors duration-300 text-lg">Sign Up</button>
+            </form>
+        </div>
+        <p class="text-center text-gray-400">
+            Already have an account? <a href="/login" class="text-green-400 hover:text-green-300 font-semibold">Login here</a>
+        </p>
+        <p class="text-center text-gray-500 text-sm mt-8">
+            &copy; <%= new Date().getFullYear() %> ParkEasy. All rights reserved.
+        </p>
+    </div>
+    <script src="/js/signup.js"></script>
+</body>
+</html>

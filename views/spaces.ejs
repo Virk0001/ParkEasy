@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Spaces</title>
+  <link rel="stylesheet" href="/main/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'custom-green': '#004643',
+            'custom-light-green': '#abd1c6',
+            'custom-off-white': '#f9bc60',
+            'custom-dark': '#001e1d',
+            'custom-orange': '#e16162',
+            'header-bg': '#0d1a26',
+            'nav-link': '#98c379',
+            'nav-link-hover': '#c678dd',
+            'button-bg': '#2c3e50',
+            'button-hover-bg': '#34495e',
+            'text-main': '#e0e0e0',
+            'text-accent': '#61afef',
+            'container-bg': '#1a2a3a',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom styles can be kept if they don't conflict or for very specific things */
+    /* It's often better to replace these with Tailwind utilities if possible */
+    /* For example, .occupied and .empty can become bg-red-500 and bg-green-500 */
+  </style>
+</head>
+<body class="bg-custom-dark text-text-main min-h-screen flex flex-col">
+  <header class="bg-header-bg shadow-lg py-6 sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center px-8">
+        <h1 id="lotTitle" class="text-3xl font-bold text-green-400">
+            🔲 Lot <% if (locals.lot) { %><%= lot %><% } else { %>Unknown Lot<% } %>
+        </h1>
+        <form action="/lots" method="get">
+            <button type="submit" class="bg-slate-700 hover:bg-green-500 hover:text-white text-green-400 font-semibold text-base px-5 py-2 rounded-md transition-colors">
+                ⬅ Back to Lots
+            </button>
+        </form>
+    </div>
+  </header>
+
+  <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="bg-container-bg shadow-xl rounded-lg p-8 md:p-12">
+        <h2 class="text-2xl font-bold text-green-400 mb-6 text-center">
+            Spaces in Lot <% if (locals.lot) { %><%= lot %><% } else { %>Unknown Lot<% } %>
+        </h2>
+        <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-4">
+          <% if (spaces && spaces.length > 0) { %>
+            <% spaces.forEach(space => { %>
+              <div class="p-4 text-center rounded-lg font-bold text-white <%= space.is_occupied ? 'bg-red-500' : 'bg-green-500' %>">
+                <%= space.space_id %>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <p class="col-span-full text-center text-gray-400 py-10">No spaces found for this lot.</p>
+          <% } %>
+        </div>
+    </div>
+  </main>
+
+  <footer class="bg-header-bg shadow-top mt-auto py-8">
+    <div class="container mx-auto px-8 text-center">
+        <p class="text-green-400">&copy; <%= new Date().getFullYear() %> ParkEasy. All rights reserved.</p>
+        <p class="text-slate-400 text-sm mt-2">Your hassle-free parking solution.</p>
+    </div>
+  </footer>
+</body>
+</html>
